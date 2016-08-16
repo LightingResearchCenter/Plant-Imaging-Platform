@@ -83,9 +83,19 @@ classdef PlatformObjects
             CurX = str2num(curXStr(3:end-1));
         end
         function CurY = get.CurY(obj)
-            pause(.1);
-            curYStr = serialCom.writeToSerial(obj.Ymotor,'C');
-            CurY = str2num(curYStr);
+            ii = 0;
+            loop = true;
+            while loop
+                ii = ii + 1;
+                if ii > 500
+                    loop = false;
+                end
+                curYStr = serialCom.writeToSerial(obj.Ymotor,'C');
+                CurY = str2num(curYStr);
+                if ~isempty(CurY)
+                    loop = false;
+                end
+            end
         end
         function obj = set.CurX(obj,newNum)
             if (newNum > obj.Cal.LRextents(1))||(newNum < obj.Cal.LRextents(2))
@@ -108,7 +118,7 @@ classdef PlatformObjects
             end
             curYStr = serialCom.writeToSerial(obj.Ymotor,'C');
             Cur = str2num(curYStr);
-            if abs(newNum- Cur) > 50 
+            if abs(newNum - Cur) > 50 
                 move = newNum - Cur;
                 serialCom.stepMove(obj.Ymotor ,move);
             end

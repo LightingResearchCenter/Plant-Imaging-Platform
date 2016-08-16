@@ -22,18 +22,21 @@ output = p.Results.output;
 preview(p.Results.objects.VidObj);
 if p.Results.direction == 1
     obj.CurX=(p.Results.objects.Cal.LRextents(2)+50); % move all the way to te left
-    obj.CurY=(-19000); % move all the way to the Top
+    moveY=(-19000); % move all the way to the Top
+    obj.CurY = moveY;
 elseif p.Results.direction == -1
     obj.CurX=(p.Results.objects.Cal.LRextents(1)-50); % move all the way to the right
-    obj.CurY=(p.Results.objects.Cal.TBextents(1)-50); % move all the way to To[
+    moveY=(p.Results.objects.Cal.TBextents(1)-50); % move all the way to To[
+    obj.CurY = moveY;
 end
 
- while p.Results.objects.CurY <10000
+ while p.Results.objects.CurY <20000
    %% WrITE FUNCTION HERE
+   obj.CurY = moveY;
+   disp(obj.CurY)
    [objects,imgTable] = searchRow(p.Results.objects,'step',floor(p.Results.objects.Xstep*1.5),'output',output,'direction',direction,'imgTable',imgTable);
    direction = direction*-1;
-   obj.CurY = obj.CurY + floor(obj.Ystep*1.5);
-   disp(obj.CurY)
+   moveY = double(obj.CurY + floor(obj.Ystep*1.5));
  end
  obj.CurY = 0;
  obj.CurX = 0;

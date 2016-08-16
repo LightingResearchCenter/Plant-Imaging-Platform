@@ -6,5 +6,10 @@ if strcmpi(sPort.Tag,'MSP432')
     end
 end
 output = fscanf(sPort);
+if strcmpi(sPort.Tag,'MSP432')
+    while sPort.BytesAvailable > 1
+       output = fscanf(sPort);
+    end
+end
 serialCom.comErrorCheck(output)
 end
