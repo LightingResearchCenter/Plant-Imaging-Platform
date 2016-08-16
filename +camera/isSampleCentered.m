@@ -51,10 +51,12 @@ if results.direction == 1
             camera.isSampleCentered( BWimg2,results,nRun, dirMove, stepLR, stepTB);
         case 3
             serialCom.stepMove(results.object.Ymotor,stepTB);
+            pause(1);
             [TFSample,BWimg2]=camera.isSample(results.object.CurImg);
             camera.isSampleCentered( BWimg2,results,nRun, dirMove, stepLR, stepTB);
         case 4
             serialCom.stepMove(results.object.Ymotor,-stepTB);
+            pause(1);
             [TFSample,BWimg2]=camera.isSample(results.object.CurImg);
             camera.isSampleCentered( BWimg2,results,nRun, dirMove, stepLR, stepTB);
         otherwise
@@ -74,10 +76,12 @@ else
             camera.isSampleCentered( BWimg2, results,nRun, dirMove, stepLR, stepTB);
         case 3
             serialCom.stepMove(results.object.Ymotor,stepTB);
+            pause(1);
             [TFSample,BWimg2]=camera.isSample(results.object.CurImg);
             camera.isSampleCentered( BWimg2,results,nRun, dirMove, stepLR, stepTB);
         case 4
             serialCom.stepMove(results.object.Ymotor,-stepTB);
+            pause(1);
             [TFSample,BWimg2]=camera.isSample(results.object.CurImg);
             camera.isSampleCentered( BWimg2,results,nRun, dirMove, stepLR, stepTB);
         otherwise

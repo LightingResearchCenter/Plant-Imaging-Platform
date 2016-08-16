@@ -33,6 +33,7 @@ while (~statusBin(3))
     %Insert what to do after a move
     %demo
     [TFSample,BWimg]=camera.isSample(p.Results.object.CurImg);
+    pause(1)
     if TFSample
         if ~isequal(BWimg,ones(size(BWimg)))
             if ~camera.isEdge(BWimg)
@@ -40,6 +41,7 @@ while (~statusBin(3))
                 camera.isSampleCentered(BWimg,p.Results);
                 % WRITE THE IS CENTERED FUCNTION HERE !!!!!!!>>>>> GOD DAMN IT TIM
                 fileName = fullfile(p.Results.output,[datestr(now,'mm_dd_yyyy HH_MM_SS_FFF') , '.png']);
+                pause(1)
                 [TFSample,~]=camera.isSample(p.Results.object.CurImg);
                 if TFSample
                     
@@ -47,13 +49,8 @@ while (~statusBin(3))
                     newTable = struct('SampleNum',[height(pictureTable)+1],...
                         'FileName', [fileName],...
                         'XLoction', [ p.Results.object.CurX],...
-                        'YLocation',[ obj.CurY] );
-%                     pause(.2);
-                    try
+                        'YLocation',[ p.Results.object.CurY]);
                     newTable = struct2table(newTable);
-                    catch err
-                        display(err);
-                    end
                     pictureTable = [pictureTable;newTable];
                     clear('newTable');
                     
