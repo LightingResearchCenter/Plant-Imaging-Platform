@@ -124,7 +124,7 @@ classdef PlatformObjects
             end
         end
         function CurImg = get.CurImg(obj)
-            pause(.1);
+            pause(1);
             CurImg = getsnapshot(obj.VidObj);
         end
         function Xstep = get.Xstep(obj)

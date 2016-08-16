@@ -1,19 +1,8 @@
-function [ s, dirMove ] = isSampleCentered( BWimg, results,nRun, preDir, stepLR, stepTB)
+function [ s, dirMove ] = isSampleCentered( BWimg, results)
 %isSampleCentered Summary of this function goes here
 %
-
-%% Input Setup
-imgSize = 50;
-if nargin > 3
-nRun = 0;
-preDir = 0;
-stepLR = int32(floor((1.5*imgSize*results.object.Cal.pix2mm)/(results.object.Cal.LRstep2mm/100)));
-stepTB = int32(floor((1.5*(imgSize*results.object.Cal.pix2mm)/(results.object.Cal.TBstep2mm/100))));
-else
-    nRun = nRun +1;
-    
-end
 %% Split up edge of pictures
+imgSize = 50;
 s.imgLeft = BWimg(:,end-imgSize:end);
 s.imgRight = BWimg(:,1:imgSize);
 s.imgTop= BWimg(1:imgSize,:);
@@ -33,9 +22,9 @@ elseif sampleTop
 elseif sampleBot
     dirMove = 4;
 end
-if preDir ~= dirMove
-    
-end
+stepLR = int32(floor((1.5*imgSize*results.object.Cal.pix2mm)/(results.object.Cal.LRstep2mm/100)));
+stepTB = int32(floor((1.5*(imgSize*results.object.Cal.pix2mm)/(results.object.Cal.TBstep2mm/100))));
+
 if results.direction == 1
     switch dirMove
         case 0
@@ -44,19 +33,19 @@ if results.direction == 1
             serialCom.stepMove(results.object.Xmotor,-stepLR);
             
             [TFSample,BWimg2]=camera.isSample(results.object.CurImg);
-            camera.isSampleCentered( BWimg2, results,nRun, dirMove, stepLR, stepTB);
+            camera.isSampleCentered( BWimg2, results);
         case 2
             serialCom.stepMove(results.object.Xmotor,stepLR);
             [TFSample,BWimg2]=camera.isSample(results.object.CurImg);
-            camera.isSampleCentered( BWimg2,results,nRun, dirMove, stepLR, stepTB);
+            camera.isSampleCentered( BWimg2,results);
         case 3
             serialCom.stepMove(results.object.Ymotor,stepTB);
             [TFSample,BWimg2]=camera.isSample(results.object.CurImg);
-            camera.isSampleCentered( BWimg2,results,nRun, dirMove, stepLR, stepTB);
+            camera.isSampleCentered( BWimg2,results);
         case 4
             serialCom.stepMove(results.object.Ymotor,-stepTB);
             [TFSample,BWimg2]=camera.isSample(results.object.CurImg);
-            camera.isSampleCentered( BWimg2,results,nRun, dirMove, stepLR, stepTB);
+            camera.isSampleCentered( BWimg2,results);
         otherwise
             
     end
@@ -67,19 +56,19 @@ else
         case 2
             serialCom.stepMove(results.object.Xmotor,stepLR);
             [TFSample,BWimg2]=camera.isSample(results.object.CurImg);
-            camera.isSampleCentered( BWimg2,results,nRun, dirMove, stepLR, stepTB);
+            camera.isSampleCentered( BWimg2,results);
         case 1
             serialCom.stepMove(results.object.Xmotor,-stepLR);
             [TFSample,BWimg2]=camera.isSample(results.object.CurImg);
-            camera.isSampleCentered( BWimg2, results,nRun, dirMove, stepLR, stepTB);
+            camera.isSampleCentered( BWimg2, results);
         case 3
             serialCom.stepMove(results.object.Ymotor,stepTB);
             [TFSample,BWimg2]=camera.isSample(results.object.CurImg);
-            camera.isSampleCentered( BWimg2,results,nRun, dirMove, stepLR, stepTB);
+            camera.isSampleCentered( BWimg2,results);
         case 4
             serialCom.stepMove(results.object.Ymotor,-stepTB);
             [TFSample,BWimg2]=camera.isSample(results.object.CurImg);
-            camera.isSampleCentered( BWimg2,results,nRun, dirMove, stepLR, stepTB);
+            camera.isSampleCentered( BWimg2,results);
         otherwise
             disp('what did you do to get here?')
     end
