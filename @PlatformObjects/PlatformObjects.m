@@ -116,12 +116,12 @@ classdef PlatformObjects
                 move = newNum - Cur;
                 serialCom.stepMove(obj.Ymotor ,move);
             end
-            curYStr = serialCom.writeToSerial(obj.Ymotor,'C');
-            Cur = str2num(curYStr);
-            if abs(newNum - Cur) > 50 
-                move = newNum - Cur;
-                serialCom.stepMove(obj.Ymotor ,move);
-            end
+%             curYStr = serialCom.writeToSerial(obj.Ymotor,'C');
+%             Cur = str2num(curYStr);
+%             if abs(newNum - Cur) > 50 
+%                 move = newNum - Cur;
+%                 serialCom.stepMove(obj.Ymotor ,move);
+%             end
         end
         function CurImg = get.CurImg(obj)
             pause(.1);

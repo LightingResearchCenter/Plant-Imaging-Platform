@@ -2,7 +2,8 @@ function cal = calibration(objects)
 cal = struct(  'pix2mm',    [],...
     'LRstep2mm',    [],...
     'LRextents',    [],...
-    'TBstep2mm',    []);
+    'TBstep2mm',    [],...
+    'TBextents',    []);
 %% LR direction
 h = preview(objects.VidObj);
 message = sprintf('Please Place the Ruler inside the preview window.\n When ready click Ok');
@@ -60,6 +61,9 @@ close(gcf);
 [forward, backward] = serialCom.findextens(objects.Xmotor);
 cal.LRextents = [forward, backward];
 serialCom.returnHome(objects.Xmotor, cal.LRextents(1),cal.LRextents(2));
+[top, bottom] = serialCom.findextens(objects.Ymotor);
+cal.TBextents = [top, bottom];
+serialCom.returnHome(objects.Ymotor, cal.TBextents(1),cal.TBextents(2));
 message = sprintf('Place the tray on the platfrom and focus the image.\n Then Press OK.');
 reply = questdlg(message, 'Focus', 'OK', 'Cancel', 'OK');
 closepreview;
