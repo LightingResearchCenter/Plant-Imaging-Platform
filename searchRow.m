@@ -38,7 +38,6 @@ while (~statusBin(3))
             if ~camera.isEdge(BWimg)
                 searchCol = p.Results.object.CurY;
                 camera.isSampleCentered(BWimg,p.Results);
-                % WRITE THE IS CENTERED FUCNTION HERE !!!!!!!>>>>> GOD DAMN IT TIM
                 fileName = fullfile(p.Results.output,[datestr(now,'mm_dd_yyyy HH_MM_SS_FFF') , '.png']);
                 [TFSample,~]=camera.isSample(p.Results.object.CurImg);
                 if TFSample
@@ -49,11 +48,7 @@ while (~statusBin(3))
                         'XLoction', [ p.Results.object.CurX],...
                         'YLocation',[ obj.CurY] );
 %                     pause(.2);
-                    try
                     newTable = struct2table(newTable);
-                    catch err
-                        display(err);
-                    end
                     pictureTable = [pictureTable;newTable];
                     clear('newTable');
                     
