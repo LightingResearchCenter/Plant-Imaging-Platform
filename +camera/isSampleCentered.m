@@ -4,11 +4,11 @@ function [ s, dirMove ] = isSampleCentered( BWimg, results,nRun, preDir, stepLR,
 
 %% Input Setup
 imgSize = 50;
-if nargin > 3
+if nargin == 2
 nRun = 0;
 preDir = 0;
-stepLR = int32(floor((2*imgSize*results.object.Cal.pix2mm)/(results.object.Cal.LRstep2mm/100)));
-stepTB = int32(floor((2*(imgSize*results.object.Cal.pix2mm)/(results.object.Cal.TBstep2mm/100))));
+stepLR = int32(floor((3*imgSize*results.object.Cal.pix2mm)/(results.object.Cal.LRstep2mm/100)));
+stepTB = int32(floor((3*(imgSize*results.object.Cal.pix2mm)/(results.object.Cal.TBstep2mm/100))));
 else
     nRun = nRun +1;
 end
