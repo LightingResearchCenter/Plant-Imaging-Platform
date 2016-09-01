@@ -26,6 +26,9 @@ classdef PlatformObjects
     methods (Access = private)
         output = calibration(obj)
     end
+    methods
+        output = saveImgs(obj,path)
+    end
     
     methods
         function obj = PlatformObjects(varargin)
