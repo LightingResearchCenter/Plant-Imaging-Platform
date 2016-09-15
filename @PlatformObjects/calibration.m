@@ -1,11 +1,11 @@
 function cal = calibration(objects)
-cal = struct(  'pix2mm',    [],...
+cal = struct('pix2mm',    [],...
     'LRstep2mm',    [],...
     'LRextents',    [],...
     'TBstep2mm',    [],...
     'TBextents',    []);
 %% LR direction
-h = preview(objects.VidObj);
+h = preview(objects.VidObj); %#ok<*NASGU>
 message = sprintf('Please Place the Ruler inside the preview window.\n When ready click Ok');
 reply = questdlg(message, 'Place Ruler', 'OK', 'Cancel', 'OK');
 if strcmpi(reply, 'cancel')
@@ -34,7 +34,7 @@ serialCom.stepMove(objects.Xmotor,-100);
 close(gcf);
 %% TB Direction 
 h = preview(objects.VidObj);
-message = sprintf('Please Place the Ruler inside the preview window.\n When ready click Ok');
+message = sprintf('Please Place the Rul er inside the preview window.\n When ready click Ok');
 reply = questdlg(message, 'Place Ruler', 'OK', 'Cancel', 'OK');
 if strcmpi(reply, 'cancel')
     % User said No, so exit.

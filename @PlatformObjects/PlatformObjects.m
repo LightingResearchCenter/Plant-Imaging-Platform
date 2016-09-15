@@ -13,8 +13,6 @@ classdef PlatformObjects
         VidObj  % VideoInput handel
         VidSrc
         Cal
-        
-        
     end
     properties (Dependent)
         Xstep

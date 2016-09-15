@@ -38,7 +38,7 @@ if strcmpi(cameraFamily,'pointgrey')
     src.GainMode  = 'Manual';
     src.Gain = 7;
     src.ShutterMode = 'Manual';
-    src.Shutter = 3.6;
+    src.Shutter = 10;
     src.FrameRatePercentageMode = 'Auto';
 end
 end
