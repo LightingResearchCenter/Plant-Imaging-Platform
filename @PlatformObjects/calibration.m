@@ -12,7 +12,7 @@ if strcmpi(reply, 'cancel')
     % User said No, so exit.
     return;
 end
-pause(0.1)
+pause(0.5)
 img = objects.CurImg;
 imshow(img);
 
@@ -34,7 +34,7 @@ serialCom.stepMove(objects.Xmotor,-100);
 close(gcf);
 %% TB Direction 
 h = preview(objects.VidObj);
-message = sprintf('Please Place the Rul er inside the preview window.\n When ready click Ok');
+message = sprintf('Please Place the Ruler inside the preview window.\n When ready click Ok');
 reply = questdlg(message, 'Place Ruler', 'OK', 'Cancel', 'OK');
 if strcmpi(reply, 'cancel')
     % User said No, so exit.
@@ -44,8 +44,8 @@ pause(0.1)
 img = objects.CurImg;
 imshow(img);
 
-message = sprintf('Please select a point in the Top/Bottom Direction.\n When finished double click the line.');
-reply = questdlg(message, 'select point', 'OK', 'Cancel', 'OK');
+message = sprintf('Please select a point in the Top/Bottom Direction.\n                     When finished hit [Enter].');
+reply = questdlg(message, 'Select Point', 'OK', 'Cancel', 'OK');
 
 serialCom.stepMove(objects.Ymotor,100);
 pause(1);
@@ -64,7 +64,7 @@ serialCom.returnHome(objects.Xmotor, cal.LRextents(1),cal.LRextents(2));
 [top, bottom] = serialCom.findextens(objects.Ymotor);
 cal.TBextents = [top, bottom];
 serialCom.returnHome(objects.Ymotor, cal.TBextents(1),cal.TBextents(2));
-message = sprintf('Place the tray on the platfrom and focus the image.\n Then Press OK.');
+ message = sprintf('Place the tray on the platfrom and focus the image.\n                           Then click OK.');
 reply = questdlg(message, 'Focus', 'OK', 'Cancel', 'OK');
 closepreview;
 end
