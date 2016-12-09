@@ -17,11 +17,11 @@ img = objects.CurImg;
 imshow(img);
 
 
-message = sprintf('Please draw a line that is 1 CM in length along the Left/Right Direction.\n When finished double click the line.');
+message = sprintf('Please draw a line that is 5 MM in length along the Left/Right Direction.\n When finished double click the line.');
 reply = questdlg(message, 'Draw Line', 'OK', 'Cancel', 'OK');
 h = imline;
 position = wait(h);
-cal.pix2mm = 10/pdist(position); 
+cal.pix2mm = 5/pdist(position); 
 serialCom.stepMove(objects.Xmotor,100);
 pause(1);
 img2 = objects.CurImg;

@@ -3,9 +3,9 @@ function [ sampleFound ,bw5] = isSample( img )
 %   Detailed explanation goes here
 
 
-[bw2,img2] = camera.createMask(img);
+[bw2,~] = camera.createMask(img);
 [x,y] = size(bw2);
-imgSize = x*y*.05;
+imgSize = floor(x*y*.05);
 bw3 = bwareaopen(bw2,imgSize);
 se = strel('disk',25);
 bw4 = imclose(bw3,se);
@@ -21,4 +21,3 @@ else
     sampleFound = true;
 end
 end
-

@@ -30,21 +30,19 @@ statusInt = str2num(output(5:end)); %#ok<ST2NM>
 statusBin = dec2binvec(statusInt,8);
 while (~statusBin(3))
     serialCom.stepMove(p.Results.object.Xmotor,p.Results.direction*p.Results.step);
-    %Insert what to do after a move
-    %demo
-    [TFSample,BWimg]=camera.isSample(p.Results.object.CurImg);
+    [TFSample,BWimg]=camera.isSample(p.Results.object.CurImg); 
     if TFSample
         if ~isequal(BWimg,ones(size(BWimg)))
             if ~camera.isEdge(BWimg)
                 searchCol = p.Results.object.CurY;
-                camera.isSampleCentered(BWimg,p.Results);
-                [TFSample,~]=camera.isSample(p.Results.object.CurImg);
+                camera.isSampleCentered(BWimg,p.Results); %%this is the important line your working on 
+                [TFSample]=camera.isNewSample(p.Results.object.CurX,p.Results.object.CurY,pictureTable);
                 if TFSample
-                    output = p.Results.object.saveImgs(p.Results.object,p.Results.output);
-                    newTable = struct('SampleNum',[height(pictureTable)+1],...
-                        'FileName', [fileName],...
-                        'XLoction', [ p.Results.object.CurX],...
-                        'YLocation',[ obj.CurY] );
+                    fileName = p.Results.object.saveImgs(p.Results.output);
+                    newTable = struct('SampleNum',height(pictureTable)+1,...
+                        'FileName', fileName,...
+                        'XLocation',  p.Results.object.CurX,...
+                        'YLocation', p.Results.object.CurY );
 %                     pause(.2);
                     try
                     newTable = struct2table(newTable);

@@ -18,3 +18,7 @@
 # Testing Images
 output/
 *Demo*
+findSampletest.m
+rgbBinarize.m
+send_text_message.m
+test.m

@@ -30,10 +30,6 @@ if strcmpi(cameraFamily,'pointgrey')
     src.WhiteBalanceRBMode = 'Manual';
     src.WhiteBalanceRB = [450 975];
     src.Saturation = 175;
-    pos = vid.ROIPosition;
-    pos5percent = [pos(3)*.12, pos(4)*.12];
-    vid.ROIPosition = [pos5percent(1),pos5percent(2),...
-        pos(3)-(2*pos5percent(1)),pos(4)-(2*pos5percent(2))];
     %     vid.ROIPosition = [124 124 976 774];
     src.GainMode  = 'Manual';
     src.Gain = 7;

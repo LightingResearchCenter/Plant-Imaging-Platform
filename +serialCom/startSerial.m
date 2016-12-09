@@ -14,7 +14,7 @@ if v == 1
         else
             [s1,v1] = listdlg('PromptString','Which Device is on this port?',...
                 'SelectionMode','single',...
-                'ListString',{'NanoTec','MSP432'});
+                'ListString',{'NanoTec','MSP432','Pololu'});
             if v1 == 1
                 if s1 == 1 % Nanotec
                     
@@ -38,6 +38,17 @@ if v == 1
                     else
                         error('Port was not valid, please check to make sure it is available, and not in use');
                     end
+                elseif s1 == 3 %Pololu
+                    sPort = serial(serialInfo.SerialPorts{s},'BaudRate',9600);
+                    str = strfind(serialInfo.AvailableSerialPorts,serialInfo.SerialPorts{s});
+                    if any([str{:}])
+                        fopen(sPort);
+                        sPort.Status;
+                        set(sPort,'Terminator',char(13));
+                        sPort.Tag = 'Pololu';
+                    else
+                        error('Port was not valid, please check to make sure it is available, and not in use');
+                    end
                 else
                     error('unknown error with device model')
                 end
@@ -49,7 +60,7 @@ if v == 1
     else
         [s1,v1] = listdlg('PromptString','Which Device is on this port?',...
             'SelectionMode','single',...
-            'ListString',{'NanoTec','MSP432'});
+            'ListString',{'NanoTec','MSP432','Pololu'});
         if v1 == 1
             if s1 == 1 % Nanotec
                 
@@ -75,6 +86,17 @@ if v == 1
                     error('Port was not valid, please check to make sure it is available, and not in use');
                 end
                 serialCom.MSP432Init(sPort);
+            elseif s1 == 3 %Pololu
+                sPort = serial(serialInfo.SerialPorts{s},'BaudRate',9600);
+                str = strfind(serialInfo.AvailableSerialPorts,serialInfo.SerialPorts{s});
+                if any([str{:}])
+                    fopen(sPort);
+                    sPort.Status;
+                    set(sPort,'Terminator',char(13));
+                    sPort.Tag = 'Pololu';
+                else
+                    error('Port was not valid, please check to make sure it is available, and not in use');
+                end
             else
                 error('No device was selcted');
             end
