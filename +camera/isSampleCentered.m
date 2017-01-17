@@ -23,7 +23,7 @@ Xstep = floor(((deltaX/results.object.Cal.pix2mm)/results.object.Cal.LRstep2mm)/
 Ystep = floor(((deltaY/results.object.Cal.pix2mm)/results.object.Cal.TBstep2mm)/200);
 
 %% tell motor to move and check new location.
-if abs(Xstep) > 80
+if abs(Xstep) > 100
     results.object.CurX = results.object.CurX - Xstep;
     [TFSample,BWimg2]=camera.isSample(results.object.CurImg);
     if TFSample&& nRun <= 10
@@ -32,7 +32,7 @@ if abs(Xstep) > 80
             camera.isSampleCentered( BWimg2, results,nRun);
         end
     end
-elseif abs(Ystep) > 80
+elseif abs(Ystep) > 100
     results.object.CurY = results.object.CurY - Ystep;
     [TFSample,BWimg2]=camera.isSample(results.object.CurImg);
     if TFSample&& nRun <= 10

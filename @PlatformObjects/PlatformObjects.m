@@ -7,7 +7,7 @@ classdef PlatformObjects
 %     Required Tool-Boxes:data_acq_toolbox, image_acquisition_toolbox,
 %     image_toolbox, instr_control_toolbox, matlab, statistics_toolbox
     
-    properties
+    properties 
         Xmotor  % serial pointer for X direction (left:right)
         Ymotor  % serial pointer for Y direction (top:bottom)
         VidObj  % VideoInput handel
@@ -74,7 +74,6 @@ classdef PlatformObjects
                 otherwise
                     error('Too many inputs');
             end
-            obj.Cal = calibration(obj);
         end
         
         function CurX = get.CurX(obj)
@@ -87,7 +86,7 @@ classdef PlatformObjects
         end
         function obj = set.CurX(obj,newNum)
             if (newNum > obj.Cal.LRextents(1))||(newNum < obj.Cal.LRextents(2))
-                error('That Position is ourside of the extents for the current  setup.');
+                warning('That Position is ourside of the extents for the current  setup.');
             else
                 curXStr = serialCom.writeToSerial(obj.Xmotor,'C');
                 Cur = str2num(curXStr(3:end-1));
