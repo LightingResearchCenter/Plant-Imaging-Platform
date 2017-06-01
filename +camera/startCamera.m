@@ -35,7 +35,7 @@ if strcmpi(cameraFamily,'pointgrey')
     src.Gain = 7;
     src.ShutterMode = 'Manual';
     src.Shutter = 100;
-    src.FrameRatePercentageMode = 'Auto';
+    src.FrameRateMode = 'Auto';
     triggerconfig(vid, 'manual');
     
 end

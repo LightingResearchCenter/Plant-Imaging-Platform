@@ -9,6 +9,7 @@ if strcmp(sPort.Tag,'Nanotec')
         statusInt = str2num(output(5:end)); %#ok<ST2NM>
         statusBin = dec2binvec(statusInt);
         i=i+1;
+        pause(0.1)
         if statusBin(3) == 1
             break
         end

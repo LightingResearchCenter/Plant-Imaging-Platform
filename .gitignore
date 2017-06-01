@@ -14,11 +14,13 @@
 
 # Simulink Code Generation
 findSample*/
-
-# Testing Images
+Bri*/
+tester/
+# Testing 
 output/
 *Demo*
 findSampletest.m
 rgbBinarize.m
 send_text_message.m
 test.m
+*.prj
