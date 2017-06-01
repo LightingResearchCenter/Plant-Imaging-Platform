@@ -44,11 +44,7 @@ while (~statusBin(3))
                         'XLocation',  p.Results.object.CurX,...
                         'YLocation', p.Results.object.CurY );
 %                     pause(.2);
-                    try
                     newTable = struct2table(newTable);
-                    catch err
-                        display(err);
-                    end
                     pictureTable = [pictureTable;newTable];
                     clear('newTable');
                     
