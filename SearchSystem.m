@@ -1,4 +1,4 @@
-function [ objects,imgTable ] = SearchSystem( obj, varargin )
+function [ obj,imgTable ] = SearchSystem( obj, varargin )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 tic
@@ -9,8 +9,8 @@ defaultDirection = 1;
 validDirection = [1,-1];
 checkDirection = @(x) any(ismember(x,validDirection));
 defaultTable = cell2table(cell(0,4),...
-    'VariableNames', {'SampleNum', 'FileName', 'XLoction', 'YLocation'});
-defaultOutput = 'output';
+    'VariableNames', {'SampleNum', 'FileName', 'XLocation', 'YLocation'});
+defaultOutput = fullfile('output',datestr(now,'yyyy_mm_dd-HH_MM_SS'));
 addRequired(p,'objects',validPlatformObject);
 addOptional(p,'imgTable',defaultTable,@istable);
 addParameter(p,'direction',defaultDirection,checkDirection);
@@ -19,27 +19,36 @@ parse(p,obj,varargin{:});
 imgTable= p.Results.imgTable;
 direction = p.Results.direction;
 output = p.Results.output;
+if ~(7 == exist(output,'dir'))
+    mkdir(output)
+end
 preview(p.Results.objects.VidObj);
 if p.Results.direction == 1
     obj.CurX=(p.Results.objects.Cal.LRextents(2)+50); % move all the way to te left
-    moveY=(-19000); % move all the way to the Top
+    moveY=(p.Results.objects.Cal.TBextents(2)+50); % move all the way to the Top
     obj.CurY = moveY;
 elseif p.Results.direction == -1
     obj.CurX=(p.Results.objects.Cal.LRextents(1)-50); % move all the way to the right
-    moveY=(p.Results.objects.Cal.TBextents(1)-50); % move all the way to To[
+    moveY=(p.Results.objects.Cal.TBextents(1)-50); % move all the way to the Top
     obj.CurY = moveY;
 end
-
- while p.Results.objects.CurY <20000
-   %% WrITE FUNCTION HERE
-   obj.CurY = moveY;
-   disp(obj.CurY)
-   [objects,imgTable] = searchRow(p.Results.objects,'step',floor(p.Results.objects.Xstep*1.5),'output',output,'direction',direction,'imgTable',imgTable);
-   direction = direction*-1;
-   moveY = double(obj.CurY + floor(obj.Ystep*1.5));
- end
- obj.CurY = 0;
- obj.CurX = 0;
- toc
+outputCom = serialCom.writeToSerial(p.Results.objects.Ymotor,'$');
+statusInt = str2num(outputCom(5:end)); %#ok<ST2NM>
+statusBin = dec2binvec(statusInt,8);
+while (~statusBin(3))
+    %% WrITE FUNCTION HERE
+    obj.CurY = moveY;
+    disp(obj.CurY)
+    [obj,imgTable] = searchRow(p.Results.objects,'step',floor(p.Results.objects.Xstep*1.2),'output',output,'direction',direction,'imgTable',imgTable);
+    direction = direction*-1;
+    moveY = double(obj.CurY + floor(obj.Ystep*1.2));
+    outputCom = serialCom.writeToSerial(p.Results.objects.Ymotor,'$');
+    statusInt = str2num(outputCom(5:end)); %#ok<ST2NM>
+    statusBin = dec2binvec(statusInt,8);
+end
+serialCom.writeToSerial(p.Results.objects.Ymotor,'D');
+obj.CurY = 0;
+obj.CurX = 0;
+toc
 end
 

@@ -13,10 +13,14 @@
 *.mex*
 
 # Simulink Code Generation
-
-
-# Testing Images
+findSample*/
+Bri*/
+tester/
+# Testing 
 output/
-
-# Demo files used to 
 *Demo*
+findSampletest.m
+rgbBinarize.m
+send_text_message.m
+test.m
+*.prj

@@ -6,7 +6,7 @@ output = serialCom.writeToSerial(sPort,'$');
 statusInt = str2num(output(5:end)); %#ok<ST2NM>
 statusBin = dec2binvec(statusInt,8);
 while (~statusBin(3))
-    serialCom.stepMove(sPort,10000);
+    serialCom.stepMove(sPort,20000);
     
     output = serialCom.writeToSerial(sPort,'$');
     statusInt = str2num(output(5:end)); %#ok<ST2NM>
@@ -21,7 +21,7 @@ output = serialCom.writeToSerial(sPort,'$');
 statusInt = str2num(output(5:end)); %#ok<ST2NM>
 statusBin = dec2binvec(statusInt);
 while (~statusBin(3))
-    serialCom.stepMove(sPort,-10000);
+    serialCom.stepMove(sPort,-20000);
     output = serialCom.writeToSerial(sPort,'$');
     statusInt = str2num(output(5:end)); %#ok<ST2NM>
     statusBin = dec2binvec(statusInt);

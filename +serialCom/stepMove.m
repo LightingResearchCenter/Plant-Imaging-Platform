@@ -25,5 +25,14 @@ output{2} = serialCom.writeToSerial(sPort,['s',num2str(absStepCount)]);
 serialCom.comErrorCheck(output{2});
 output{3} = serialCom.writeToSerial(sPort,'A');
 serialCom.comErrorCheck(output{3});
+% if strcmpi(sPort.Tag,'MSP432')
+%     output{4} = serialCom.writeToSerial(sPort,'$');
+%     statusInt = str2num(output{4}(5:end)); %#ok<ST2NM>
+%     statusBin = dec2binvec(statusInt,8);
+%     if statusBin(3) 
+%         output{3} = serialCom.writeToSerial(sPort,'D');
+%     end
+% end
+
 serialCom.waitTillReady(sPort);
 end

@@ -7,14 +7,12 @@ classdef PlatformObjects
 %     Required Tool-Boxes:data_acq_toolbox, image_acquisition_toolbox,
 %     image_toolbox, instr_control_toolbox, matlab, statistics_toolbox
     
-    properties
+    properties 
         Xmotor  % serial pointer for X direction (left:right)
         Ymotor  % serial pointer for Y direction (top:bottom)
         VidObj  % VideoInput handel
         VidSrc
         Cal
-        
-        
     end
     properties (Dependent)
         Xstep
@@ -23,8 +21,9 @@ classdef PlatformObjects
         CurY    % How far the Y motor has moved from home
         CurImg  % the current image seen by VidObj
     end
-    methods (Access = private)
+    methods 
         output = calibration(obj)
+        output = saveImgs(obj,path)
     end
     
     methods
@@ -61,9 +60,9 @@ classdef PlatformObjects
                             if isa(varargin{3},'videoinput')
                                 obj.Xmotor = varargin{1};
                                 obj.Ymotor = varargin{2};
-                                obj.VidObj = camera.startCamera();
+                                obj.VidObj = varargin{3};
                             else
-                                error('The Third input must be a videoinput Class Object, and should control the Top/Bottom Motor');
+                                error('The Third input must be a videoinput Class Object.');
                             end
                         else
                             error('The second input must be a Serial Class Object, and should control the Top/Bottom Motor');
@@ -75,7 +74,6 @@ classdef PlatformObjects
                 otherwise
                     error('Too many inputs');
             end
-            obj.Cal = calibration(obj);
         end
         
         function CurX = get.CurX(obj)
@@ -83,23 +81,12 @@ classdef PlatformObjects
             CurX = str2num(curXStr(3:end-1));
         end
         function CurY = get.CurY(obj)
-            ii = 0;
-            loop = true;
-            while loop
-                ii = ii + 1;
-                if ii > 500
-                    loop = false;
-                end
                 curYStr = serialCom.writeToSerial(obj.Ymotor,'C');
-                CurY = str2num(curYStr);
-                if ~isempty(CurY)
-                    loop = false;
-                end
-            end
+                CurY = str2num(curYStr(3:end-1));
         end
         function obj = set.CurX(obj,newNum)
             if (newNum > obj.Cal.LRextents(1))||(newNum < obj.Cal.LRextents(2))
-                error('That Position is ourside of the extents for the current  setup.');
+                warning('That Position is ourside of the extents for the current  setup.');
             else
                 curXStr = serialCom.writeToSerial(obj.Xmotor,'C');
                 Cur = str2num(curXStr(3:end-1));
@@ -111,17 +98,17 @@ classdef PlatformObjects
         end
         function obj = set.CurY(obj,newNum)
             curYStr = serialCom.writeToSerial(obj.Ymotor,'C');
-            Cur = str2num(curYStr);
+            Cur = str2num(curYStr(3:end-1));
             if newNum ~= Cur
                 move = newNum - Cur;
                 serialCom.stepMove(obj.Ymotor ,move);
             end
-            curYStr = serialCom.writeToSerial(obj.Ymotor,'C');
-            Cur = str2num(curYStr);
-            if abs(newNum - Cur) > 50 
-                move = newNum - Cur;
-                serialCom.stepMove(obj.Ymotor ,move);
-            end
+%             curYStr = serialCom.writeToSerial(obj.Ymotor,'C');
+%             Cur = str2num(curYStr);
+%             if abs(newNum - Cur) > 50 
+%                 move = newNum - Cur;
+%                 serialCom.stepMove(obj.Ymotor ,move);
+%             end
         end
         function CurImg = get.CurImg(obj)
             pause(.1);
@@ -135,7 +122,7 @@ classdef PlatformObjects
         function Ystep = get.Ystep(obj)
             img = obj.CurImg;
             imgSize = size(img);
-            Ystep = int32(floor(((imgSize(1)*obj.Cal.pix2mm)/(obj.Cal.TBstep2mm/100))*.94));
+            Ystep = int32(floor(((imgSize(1)*obj.Cal.pix2mm)/(obj.Cal.TBstep2mm/100))));
         end
         function moveHome(obj,str)
             p = inputParser;

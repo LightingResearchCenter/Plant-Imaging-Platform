@@ -28,17 +28,15 @@ if strcmpi(cameraFamily,'pointgrey')
     src = getselectedsource(vid);
     vid.FramesPerTrigger = 1;
     src.WhiteBalanceRBMode = 'Manual';
-    src.WhiteBalanceRB = [450 975];
+    src.WhiteBalanceRB = [707 719];
     src.Saturation = 175;
-    pos = vid.ROIPosition;
-    pos5percent = [pos(3)*.12, pos(4)*.12];
-    vid.ROIPosition = [pos5percent(1),pos5percent(2),...
-        pos(3)-(2*pos5percent(1)),pos(4)-(2*pos5percent(2))];
     %     vid.ROIPosition = [124 124 976 774];
     src.GainMode  = 'Manual';
     src.Gain = 7;
     src.ShutterMode = 'Manual';
-    src.Shutter = 3.6;
-    src.FrameRatePercentageMode = 'Auto';
+    src.Shutter = 100;
+    src.FrameRateMode = 'Auto';
+    triggerconfig(vid, 'manual');
+    
 end
 end

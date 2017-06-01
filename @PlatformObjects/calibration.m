@@ -1,26 +1,27 @@
 function cal = calibration(objects)
-cal = struct(  'pix2mm',    [],...
+cal = struct('pix2mm',    [],...
     'LRstep2mm',    [],...
     'LRextents',    [],...
-    'TBstep2mm',    []);
+    'TBstep2mm',    [],...
+    'TBextents',    []);
 %% LR direction
-h = preview(objects.VidObj);
+h = preview(objects.VidObj); %#ok<*NASGU>
 message = sprintf('Please Place the Ruler inside the preview window.\n When ready click Ok');
 reply = questdlg(message, 'Place Ruler', 'OK', 'Cancel', 'OK');
 if strcmpi(reply, 'cancel')
     % User said No, so exit.
     return;
 end
-pause(0.1)
+pause(0.5)
 img = objects.CurImg;
 imshow(img);
 
 
-message = sprintf('Please draw a line that is 1 CM in length along the Left/Right Direction.\n When finished double click the line.');
+message = sprintf('Please draw a line that is 5 MM in length along the Left/Right Direction.\n When finished double click the line.');
 reply = questdlg(message, 'Draw Line', 'OK', 'Cancel', 'OK');
 h = imline;
 position = wait(h);
-cal.pix2mm = 10/pdist(position); 
+cal.pix2mm = 5/pdist(position); 
 serialCom.stepMove(objects.Xmotor,100);
 pause(1);
 img2 = objects.CurImg;
@@ -43,8 +44,8 @@ pause(0.1)
 img = objects.CurImg;
 imshow(img);
 
-message = sprintf('Please select a point in the Top/Bottom Direction.\n When finished double click the line.');
-reply = questdlg(message, 'select point', 'OK', 'Cancel', 'OK');
+message = sprintf('Please select a point in the Top/Bottom Direction.\n                     When finished hit [Enter].');
+reply = questdlg(message, 'Select Point', 'OK', 'Cancel', 'OK');
 
 serialCom.stepMove(objects.Ymotor,100);
 pause(1);
@@ -60,7 +61,10 @@ close(gcf);
 [forward, backward] = serialCom.findextens(objects.Xmotor);
 cal.LRextents = [forward, backward];
 serialCom.returnHome(objects.Xmotor, cal.LRextents(1),cal.LRextents(2));
-message = sprintf('Place the tray on the platfrom and focus the image.\n Then Press OK.');
+[top, bottom] = serialCom.findextens(objects.Ymotor);
+cal.TBextents = [top, bottom];
+serialCom.returnHome(objects.Ymotor, cal.TBextents(1),cal.TBextents(2));
+ message = sprintf('Place the tray on the platfrom and focus the image.\n                           Then click OK.');
 reply = questdlg(message, 'Focus', 'OK', 'Cancel', 'OK');
 closepreview;
 end
