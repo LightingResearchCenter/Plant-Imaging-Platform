@@ -28,7 +28,7 @@ if strcmpi(cameraFamily,'pointgrey')
     src = getselectedsource(vid);
     vid.FramesPerTrigger = 1;
     src.WhiteBalanceRBMode = 'Manual';
-    src.WhiteBalanceRB = [707 719];
+    src.WhiteBalanceRB = [640 911];
     src.Saturation = 175;
     %     vid.ROIPosition = [124 124 976 774];
     src.GainMode  = 'Manual';

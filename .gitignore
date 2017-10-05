@@ -24,3 +24,6 @@ rgbBinarize.m
 send_text_message.m
 test.m
 *.prj
+*.JPG
+*.tiff
+test*
