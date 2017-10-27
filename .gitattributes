@@ -25,23 +25,17 @@
 
 # Source files
 # ============
-*.m             text
+*.m             text diff=matlab
 *.mu            text
 
 # Caution: *.m also matches Mathematica packages.
 
 # Binary files
 # ============
-*.p             binary
-*.mex*          binary
-*.fig           binary
-*.mat           binary
-*.mdl           binary
-*.slx           binary
-*.mdlp          binary
-*.slxp          binary
-*.sldd          binary
-*.mltbx         binary
-*.mlappinstall  binary
-*.mlpkginstall  binary
-*.mn            binary
+*.mlapp -crlf diff=matlabbin -merge
+*.mlx -crlf diff=matlabbin -merge
+*.mat -crlf diff=matlabbin -merge
+*.fig -crlf -diff -merge
+*.p -crlf -diff -merge
+*.slx -crlf -diff -merge
+*.mdl -crlf -diff -merge

@@ -1,0 +1,6 @@
+[diff "matlabbin"]
+	command = "'E:\Program Files\MATLAB\R2017b\bin\win64\mlDiff.exe'"
+    cmd = "'E:\Program Files\MATLAB\R2017b\bin\win64\mlMerge.exe' \"$LOCAL\" \"$REMOTE\""
+[merge "matlabbin"]
+    command = "E:\Program Files\MATLAB\R2017b\bin\win64\mlMerge.exe"
+    cmd = "'E:\Program Files\MATLAB\R2017b\bin\win64\mlMerge.exe' \"$LOCAL\" \"$REMOTE\""
