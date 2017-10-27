@@ -32,9 +32,9 @@
 
 # Binary files
 # ============
-*.mlapp -crlf diff=matlabbin -merge
-*.mlx -crlf diff=matlabbin -merge
-*.mat -crlf diff=matlabbin -merge
+*.mlapp -crlf diff=matlabdif -merge
+*.mlx -crlf diff=matlabdif -merge
+*.mat -crlf diff=matlabdif -merge
 *.fig -crlf -diff -merge
 *.p -crlf -diff -merge
 *.slx -crlf -diff -merge
