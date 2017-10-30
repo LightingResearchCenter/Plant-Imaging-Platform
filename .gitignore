@@ -27,3 +27,5 @@ test.m
 *.JPG
 *.tiff
 test*
+focusStack/
+*.mj2

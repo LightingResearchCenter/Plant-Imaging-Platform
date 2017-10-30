@@ -215,73 +215,73 @@ for j=1:SizeI(1)
 end
 
 %show and save image
-%figure;
-%imagesc(SharpImg); figure(gcf)
+figure;
+imagesc(SharpImg); figure(gcf)
 imwrite(SharpImg,'OutSharp.bmp');
 
 %Animate
-for moveSt=-AnimSize:AnimSteps:AnimSize
-    
-    disp(strcat('Animating No',num2str(moveSt)));
-    
-    Result=ImgArr{NoImage};
-	FillMaskSize=size(Result);
-	FillMask=zeros(FillMaskSize(1),FillMaskSize(2));
-    SizeStack=size(StackClip);
-    for y=1:SizeStack(1)
-        for x=1:SizeStack(2)
-            s1=StackClip(y,x);
-            x1=x+(moveSt*((NoImage-s1-(NoImage/2))/NoImage))*xMult;
-            y1=y+(moveSt*((NoImage-s1-(NoImage/2))/NoImage))*yMult;
-            
-            if (x1<1)
-                x1=1;
-            end
-            if (x1>SizeStack(2))
-                x1=SizeStack(2);
-            end
-            if (y1<1)
-                y1=1;
-            end
-            if (y1>SizeStack(1))
-                y1=SizeStack(1);
-            end
-            Index=uint16(StackClip(y,x));
-            if (Index<1)
-                Index=1;
-            end
-            if (Index>NoImage)
-                Index=NoImage;
-            end
-            FillMask(uint16(y1),uint16(x1))=1;
-            Result(uint16(y1),uint16(x1),:)=ImgArr{Index}(y,x,:);
-        end
-    end
-    
-    disp(strcat('Filling Gaps No',num2str(moveSt)));
-    
-    %fill any gaps
-    for y=1:SizeStack(1)
-        for x=1:SizeStack(2)
-			if (FillMask(y,x)==0)
-				Filled=0;
-                k=x+1;
-				while (Filled==0)
-					k=k+1;
-					if k>SizeStack(2)
-						Filled=1;
-                    elseif (FillMask(y,k)==1)
-						Result(y,x,:)=Result(y,k,:);
-						Filled=1;
-					end
-				end
-			end
-        end
-    end
-	
-    disp(strcat('Building Animation No',num2str(moveSt)));
-    
-    imwrite(Result,strcat('Out',num2str(moveSt+AnimSize+1),'.jpg')); %Use .jpg for jpegs
-    imwrite(Result,strcat('Out',num2str(AnimSize*5-(moveSt+AnimSize+1)),'.jpg')); %Use .jpg for jpegs
-
-end
+% for moveSt=-AnimSize:AnimSteps:AnimSize
+%     
+%     disp(strcat('Animating No',num2str(moveSt)));
+%     
+%     Result=ImgArr{NoImage};
+% 	FillMaskSize=size(Result);
+% 	FillMask=zeros(FillMaskSize(1),FillMaskSize(2));
+%     SizeStack=size(StackClip);
+%     for y=1:SizeStack(1)
+%         for x=1:SizeStack(2)
+%             s1=StackClip(y,x);
+%             x1=x+(moveSt*((NoImage-s1-(NoImage/2))/NoImage))*xMult;
+%             y1=y+(moveSt*((NoImage-s1-(NoImage/2))/NoImage))*yMult;
+%             
+%             if (x1<1)
+%                 x1=1;
+%             end
+%             if (x1>SizeStack(2))
+%                 x1=SizeStack(2);
+%             end
+%             if (y1<1)
+%                 y1=1;
+%             end
+%             if (y1>SizeStack(1))
+%                 y1=SizeStack(1);
+%             end
+%             Index=uint16(StackClip(y,x));
+%             if (Index<1)
+%                 Index=1;
+%             end
+%             if (Index>NoImage)
+%                 Index=NoImage;
+%             end
+%             FillMask(uint16(y1),uint16(x1))=1;
+%             Result(uint16(y1),uint16(x1),:)=ImgArr{Index}(y,x,:);
+%         end
+%     end
+%     
+%     disp(strcat('Filling Gaps No',num2str(moveSt)));
+%     
+%     fill any gaps
+%     for y=1:SizeStack(1)
+%         for x=1:SizeStack(2)
+% 			if (FillMask(y,x)==0)
+% 				Filled=0;
+%                 k=x+1;
+% 				while (Filled==0)
+% 					k=k+1;
+% 					if k>SizeStack(2)
+% 						Filled=1;
+%                     elseif (FillMask(y,k)==1)
+% 						Result(y,x,:)=Result(y,k,:);
+% 						Filled=1;
+% 					end
+% 				end
+% 			end
+%         end
+%     end
+% 	
+%     disp(strcat('Building Animation No',num2str(moveSt)));
+%     
+%     imwrite(Result,strcat('Out',num2str(moveSt+AnimSize+1),'.jpg')); %Use .jpg for jpegs
+%     imwrite(Result,strcat('Out',num2str(AnimSize*5-(moveSt+AnimSize+1)),'.jpg')); %Use .jpg for jpegs
+% 
+% end

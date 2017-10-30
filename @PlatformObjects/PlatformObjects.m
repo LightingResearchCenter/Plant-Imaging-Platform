@@ -144,6 +144,7 @@ classdef PlatformObjects
                 error('That was not an axis of movement.');
             end
         end
+        
         function posErrorFix(obj, str)
             p = inputParser;
             validPlatformObject = @(x) isa(x, 'PlatformObjects');
@@ -161,6 +162,7 @@ classdef PlatformObjects
                 error('how did you get here even?');
             end
         end
+        
         function delete(obj)
             delete(obj.Xmotor);
             delete(obj.Ymotor);
