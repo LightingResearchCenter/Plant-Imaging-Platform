@@ -1,7 +1,7 @@
 function [output] = str2com(inputstr,varargin)
    
 if isempty(varargin)
-    header = ['#1'];
+    header = '#1';
     tail = ['',13];
 else
     if length(varargin)==2

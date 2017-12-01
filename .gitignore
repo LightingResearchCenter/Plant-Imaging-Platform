@@ -29,4 +29,5 @@ test.m
 test*
 focusStack/
 *.mj2
+images/
 *.mat

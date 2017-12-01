@@ -5,7 +5,7 @@ serialInfo = instrhwinfo('serial');
 r = instrfind;
 [s,v] = listdlg('PromptString','Select Com Port',...
     'SelectionMode','single',...
-    'ListString',serialInfo.SerialPorts);
+    'ListString',seriallist);
 if v == 1
     if ~isempty(r)
         if any(strcmpi(r.port,serialInfo.SerialPorts{s}))
@@ -22,7 +22,7 @@ if v == 1
                     if any([str{:}])
                         fopen(sPort);
                         sPort.Status;
-                        set(sPort,'Terminator',char(13));
+                        set(sPort,'Terminator','CR');
                         serialCom.NanotecInit(sPort);
                     else
                         error('SerialCom:StartSerial:nanotecPortUnavailable','Port was not valid, please check to make sure it is available, and not in use');
@@ -33,7 +33,7 @@ if v == 1
                     if any([str{:}])
                         fopen(sPort);
                         sPort.Status;
-                        set(sPort,'Terminator',char(13));
+                        set(sPort,'Terminator','CR');
                         serialCom.MSP432Init(sPort);
                     else
                         error('SerialCom:StartSerial:msp432PortUnavailable','Port was not valid, please check to make sure it is available, and not in use');
@@ -80,6 +80,9 @@ if v == 1
                 str = strfind(serialInfo.AvailableSerialPorts,serialInfo.SerialPorts{s});
                 if any([str{:}])
                     fopen(sPort);
+                    sPort.RecordDetail = 'verbose';
+                    sPort.RecordName = 'MySerialFile.txt';
+                    record(sPort,'on')
                     sPort.Status;
                     set(sPort,'Terminator',char(13));
                     serialCom.MSP432Init(sPort);
