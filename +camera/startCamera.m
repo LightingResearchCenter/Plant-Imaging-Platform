@@ -11,7 +11,9 @@ if v == 1
 else
     error('no camera was selected');
 end
-if length(devInfo.DeviceIDs) ~= 1
+if length(devInfo.DeviceIDs) == 0
+    error('There is no camera connected to the computer');
+elseif length(devInfo.DeviceIDs) >= 1
     error('There is more than one camera connected to the computer');
 end
 

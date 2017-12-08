@@ -18,7 +18,6 @@ output{1} = serialCom.writeToSerial(sPort,'C');
 serialCom.comErrorCheck(output{1});
 currLocation = str2num(output{1}(3:end));
 serialCom.stepMove(sPort,(-1*currLocation));
-pause(.1);
 serialCom.stepMove(sPort,centerPos);
 serialCom.writeToSerial(sPort,'D0');
 end
