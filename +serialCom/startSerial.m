@@ -5,7 +5,7 @@ serialInfo = instrhwinfo('serial');
 r = instrfind;
 [s,v] = listdlg('PromptString','Select Com Port',...
     'SelectionMode','single',...
-    'ListString',serialInfo.SerialPorts);
+    'ListString',seriallist);
 if v == 1
     if ~isempty(r)
         if any(strcmpi(r.port,serialInfo.SerialPorts{s}))
@@ -17,26 +17,26 @@ if v == 1
                 'ListString',{'NanoTec','MSP432','Pololu'});
             if v1 == 1
                 if s1 == 1 % Nanotec
-                    
                     sPort = serial(serialInfo.SerialPorts{s},'BaudRate',115200);
                     str = strfind(serialInfo.AvailableSerialPorts,serialInfo.SerialPorts{s});
                     if any([str{:}])
                         fopen(sPort);
                         sPort.Status;
-                        set(sPort,'Terminator',char(13));
+                        set(sPort,'Terminator','CR');
+                        serialCom.NanotecInit(sPort);
                     else
-                        error('Port was not valid, please check to make sure it is available, and not in use');
+                        error('SerialCom:StartSerial:nanotecPortUnavailable','Port was not valid, please check to make sure it is available, and not in use');
                     end
-                    serialCom.NanotecInit(sPort);
                 elseif s1==2 % MSP432
                     sPort = serial(serialInfo.SerialPorts{s},'BaudRate',19200);
                     str = strfind(serialInfo.AvailableSerialPorts,serialInfo.SerialPorts{s});
                     if any([str{:}])
                         fopen(sPort);
                         sPort.Status;
-                        set(sPort,'Terminator',char(13));
+                        set(sPort,'Terminator','CR');
+                        serialCom.MSP432Init(sPort);
                     else
-                        error('Port was not valid, please check to make sure it is available, and not in use');
+                        error('SerialCom:StartSerial:msp432PortUnavailable','Port was not valid, please check to make sure it is available, and not in use');
                     end
                 elseif s1 == 3 %Pololu
                     sPort = serial(serialInfo.SerialPorts{s},'BaudRate',9600);
@@ -47,14 +47,14 @@ if v == 1
                         set(sPort,'Terminator',char(13));
                         sPort.Tag = 'Pololu';
                     else
-                        error('Port was not valid, please check to make sure it is available, and not in use');
+                        error('SerialCom:StartSerial:pololuPortUnavailable','Port was not valid, please check to make sure it is available, and not in use');
                     end
                 else
-                    error('unknown error with device model')
+                    error('SerialCom:StartSerial:deviceDialogUnknown','unknown error with device model')
                 end
-                serialCom.MSP432Init(sPort);
+                
             else
-                error('No device was selcted');
+                error('SerialCom:StartSerial:noDeviceSelect','No device was selcted');
             end
         end
     else
@@ -70,22 +70,26 @@ if v == 1
                     fopen(sPort);
                     sPort.Status;
                     set(sPort,'Terminator',char(13));
+                    serialCom.NanotecInit(sPort);
                 else
-                    error('Port was not valid, please check to make sure it is available, and not in use');
+                    error('SerialCom:StartSerial:nanotecPortUnavailable','Port was not valid, please check to make sure it is available, and not in use');
                 end
-                serialCom.NanotecInit(sPort);
             elseif s1==2 % MSP432
                 
                 sPort = serial(serialInfo.SerialPorts{s},'BaudRate',19200);
                 str = strfind(serialInfo.AvailableSerialPorts,serialInfo.SerialPorts{s});
                 if any([str{:}])
                     fopen(sPort);
+                    sPort.RecordDetail = 'verbose';
+                    sPort.RecordName = 'MySerialFile.txt';
+                    record(sPort,'on')
                     sPort.Status;
                     set(sPort,'Terminator',char(13));
+                    serialCom.MSP432Init(sPort);
                 else
-                    error('Port was not valid, please check to make sure it is available, and not in use');
+                    error('SerialCom:StartSerial:msp432PortUnavailable','Port was not valid, please check to make sure it is available, and not in use');
                 end
-                serialCom.MSP432Init(sPort);
+                
             elseif s1 == 3 %Pololu
                 sPort = serial(serialInfo.SerialPorts{s},'BaudRate',9600);
                 str = strfind(serialInfo.AvailableSerialPorts,serialInfo.SerialPorts{s});
@@ -95,15 +99,19 @@ if v == 1
                     set(sPort,'Terminator',char(13));
                     sPort.Tag = 'Pololu';
                 else
-                    error('Port was not valid, please check to make sure it is available, and not in use');
+                    error('SerialCom:StartSerial:pololuPortUnavailable','Port was not valid, please check to make sure it is available, and not in use');
                 end
             else
-                error('No device was selcted');
+                error('SerialCom:StartSerial:deviceDialogUnknown','unknown error with device model');
             end
+        else
+            error('SerialCom:StartSerial:noDeviceSelect','No device was selcted');
         end
     end
 else
-    error('No port was Selected');
+    error('SerialCom:StartSerial:noPortSelect','No port was Selected');
 end
+
+
 end
 
