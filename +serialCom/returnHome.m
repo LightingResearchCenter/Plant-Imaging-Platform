@@ -13,11 +13,11 @@ end
 if abs(abs(forward)-abs(backward))>= 20 %20 allows for differences in limit switches
     warning('The extents that are being used were not centered on the home point');
 end
-centerPos = -((ceil(((abs(forward)+abs(backward))/2)))- forward);
+centerPos = ((ceil(((abs(forward)+abs(backward))/2)))- forward);
 output{1} = serialCom.writeToSerial(sPort,'C');
 serialCom.comErrorCheck(output{1});
 currLocation = str2num(output{1}(3:end));
 serialCom.stepMove(sPort,(-1*currLocation));
 serialCom.stepMove(sPort,centerPos);
-serialCom.writeToSerial(sPort,'D0');
+% serialCom.writeToSerial(sPort,'D0');
 end

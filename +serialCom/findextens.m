@@ -1,9 +1,10 @@
 function [forward,backward] = findextens(sPort)
 
 %% check forawrd
+absStepCount = 20000;
 serialCom.writeToSerial(sPort,'D');
-output = serialCom.writeToSerial(sPort,'$');
-statusInt = str2num(output(5:end)); %#ok<ST2NM>
+tempOut = serialCom.writeToSerial(sPort,'$');
+statusInt = str2num(tempOut(5:end)); %#ok<ST2NM>
 statusBin = dec2binvec(statusInt,8);
 while (~statusBin(3))
     output{1} = serialCom.writeToSerial(sPort,'d1');
@@ -21,8 +22,8 @@ forwardstr = serialCom.writeToSerial(sPort,'C');
 forward = str2num(forwardstr(3:end));
 serialCom.writeToSerial(sPort,'D');
 %% check Backward
-output = serialCom.writeToSerial(sPort,'$');
-statusInt = str2num(output(5:end)); %#ok<ST2NM>
+tempOut = serialCom.writeToSerial(sPort,'$');
+statusInt = str2num(tempOut(5:end)); %#ok<ST2NM>
 statusBin = dec2binvec(statusInt);
 while (~statusBin(3))
     output{1} = serialCom.writeToSerial(sPort,'d0');
