@@ -163,6 +163,7 @@ end
         for loop = 1:numLines
             for loopd = 1:1%length(d)
                 figure(5)
+                hold on
                 hpAdj(loop,loopd) = plot(hyplot,xyAdjForPlot(:,1,loop,loopd), xyAdjForPlot(:,2,loop,loopd),'LineWidth',2,'Color','blue');
             end
             drawnow;
