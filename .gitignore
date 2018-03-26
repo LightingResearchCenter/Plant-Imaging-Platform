@@ -31,3 +31,4 @@ focusStack/
 *.mj2
 images/
 *.mat
+*motor.txt

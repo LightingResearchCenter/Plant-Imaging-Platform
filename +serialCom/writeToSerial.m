@@ -4,11 +4,11 @@ if strcmpi(sPort.Tag,'Pololu')
 else
     fullText = serialCom.str2com(text);
 end
-fwrite(sPort,fullText);
+fprintf(sPort,fullText);
 
 output = fgetl(sPort);
 while (sPort.BytesAvailable > 1)
     output = fgetl(sPort);
 end
-% serialCom.comErrorCheck(output)
+serialCom.comErrorCheck(output)
 end
