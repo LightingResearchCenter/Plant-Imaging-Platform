@@ -1,36 +1,72 @@
 function [output, posErr] = stepMove(sPort,stepCount)
 %STEPCOUNT send command to motor to move by the count specified
 %   note d0 = right and negative counts while d1 = left and positive counts
-%   output(end) will contain the position return call
+%   output will contain the position return call
+%   posErr = 0 if no error, 1 if soft error, 2 if the motor errored at  end
+
 posErr = 0;
-output{4} = serialCom.writeToSerial(sPort,'$');
-statusInt = str2double(output{4}(5:end));
+output = serialCom.writeToSerial(sPort,'$');
+statusInt = str2double(output(5:end));
 statusBin = dec2binvec(statusInt,8);
-if statusBin(3)
+if statusBin(3) 
     warning('StepMove:MotorError','There was a position error from the motor.\n\tResetting motor errors');
-    output{5} = serialCom.writeToSerial(sPort,'D');
+    serialCom.writeToSerial(sPort,'D');
 end
+curLocStr = serialCom.writeToSerial(sPort,'C');
+curLoc = str2double(curLocStr(3:end));
 if stepCount >0
-    output{1} = serialCom.writeToSerial(sPort,'d1');
-    serialCom.comErrorCheck(output{1});
+    serialCom.writeToSerial(sPort,'d1');
+    if ~sPort.UserData.calibration
+        if sPort.UserData.Upper-sPort.UserData.hystersis <= curLoc+stepCount
+            warning('StepMove:LimitSwitch','This movement is too close to the limit Switch, setting at the edge point.');
+            stepCount = (sPort.UserData.Upper-sPort.UserData.hystersis) - curLoc;
+            posErr = 1;
+        end
+    end
 else
-    output{1} = serialCom.writeToSerial(sPort,'d0');
-    serialCom.comErrorCheck(output{1});
+    serialCom.writeToSerial(sPort,'d0');
+    if ~sPort.UserData.calibration
+        if sPort.UserData.Lower+sPort.UserData.hystersis >= curLoc+stepCount
+            warning('StepMove:LimitSwitch','This movement is too close to the limit Switch, setting at the edge point.');
+            stepCount = (sPort.UserData.Lower+sPort.UserData.hystersis) - curLoc;
+            posErr = 1;
+        end
+    end
+end
+if stepCount > 0
+    serialCom.writeToSerial(sPort,'d1');
+elseif stepCount < 0
+    serialCom.writeToSerial(sPort,'d0');
+else
+    output = serialCom.writeToSerial(sPort,'$');
+    return
 end
 absStepCount = int16(floor(abs(stepCount)));
-output{2} = serialCom.writeToSerial(sPort,['s',num2str(round(absStepCount))]);
-serialCom.comErrorCheck(output{2});
-output{3} = serialCom.writeToSerial(sPort,'A');
-serialCom.comErrorCheck(output{3});
-output{4} = serialCom.writeToSerial(sPort,'$');
-statusInt = str2double(output{4}(5:end));
+serialCom.writeToSerial(sPort,['s',num2str(round(absStepCount))]);
+serialCom.writeToSerial(sPort,'A');
+serialCom.waitTillReady(sPort);
+output = serialCom.writeToSerial(sPort,'$');
+statusInt = str2double(output(5:end));
+while(statusInt<161)
+    output = serialCom.writeToSerial(sPort,'$');
+    statusInt = str2double(output(5:end));
+end
 statusBin = dec2binvec(statusInt,8);
 if statusBin(3)%TOOO just fix this (return home bounce error)'
-    disp(statusInt)
-    disp(statusBin)
-    output{5} = serialCom.writeToSerial(sPort,'D');
-    posErr = 1;
+    if statusInt>164
+        keyboard;
+        %this should only happen with the Y and Z Motors
+    end
+    serialCom.writeToSerial(sPort,'D');
+    posErr = 2;
+    if stepCount >0
+        serialCom.writeToSerial(sPort,'d0');
+    else
+        serialCom.writeToSerial(sPort,'d1');
+    end
+    serialCom.writeToSerial(sPort,'s10');
+    serialCom.writeToSerial(sPort,'A');
+    error('StepMove:MotorError','There was a position error from the motor.\n\tResetting motor errors');
 end
 
-serialCom.waitTillReady(sPort);
 end

@@ -8,10 +8,9 @@ function C = contrastMetric(Image)
 % lowCon = mean2(abs(Yfft(2:30)))/real(Yfft(1,1));
 % 
 % C = 1*highCon+250*lowCon; % constants 5 and 250 scale each consituent to roughly 1 for focussed image
-i = ones(3,4);
-b =  i/sum(i(:));
-Y = filter2(b,Image);
+% i = ones(3,4);
+% b =  i/sum(i(:));
+Y = rangefilt(Image);
 
-Image = Y(1000:1500,1000:1500);
-data  = double(Image(:));
+data  = double(Y(:));
 C  = var(data)/mean(data);
