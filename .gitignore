@@ -32,3 +32,4 @@ focusStack/
 images/
 *.mat
 *motor.txt
+profile_results/

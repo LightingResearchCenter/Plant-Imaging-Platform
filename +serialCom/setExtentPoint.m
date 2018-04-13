@@ -19,7 +19,7 @@ while (~statusBin(3))
     statusBin = dec2binvec(statusInt);
 end
 serialCom.writeToSerial(sPort,'d1');
-serialCom.writeToSerial(sPort,'s50');
+serialCom.writeToSerial(sPort,'s150');
 serialCom.writeToSerial(sPort,'A');
 forwardstr = serialCom.writeToSerial(sPort,'C');
 oldExtent = str2num(forwardstr(3:end));
@@ -28,7 +28,7 @@ forwardstr = serialCom.writeToSerial(sPort,'C');
 newExtent = str2num(forwardstr(3:end));
 %Move farther away from the switch
 serialCom.writeToSerial(sPort,'d1');
-serialCom.writeToSerial(sPort,'s100');
+serialCom.writeToSerial(sPort,'s200');
 serialCom.writeToSerial(sPort,'A');
 end
 

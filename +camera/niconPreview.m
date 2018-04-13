@@ -8,14 +8,19 @@ set(figh, 'CloseRequestFcn',@clean);
 
 ax = axes(figh);
 himg = imshow(zeros(424,640),'Border','tight','Parent',ax);
+i =0;
 while 1
     if isempty(findobj(figh))
         break;
     else
         [ok,im] = D850_driver_v2('live_get');
-        set(himg, 'CData', im);
+        [~, masked] = camera.createMask(im);
+        set(himg, 'CData', masked);
         drawnow;
     end
+    
+    i = i+1;
+    
 end
 % imtool(im);
 end

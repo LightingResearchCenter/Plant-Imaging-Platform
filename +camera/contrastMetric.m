@@ -10,7 +10,5 @@ function C = contrastMetric(Image)
 % C = 1*highCon+250*lowCon; % constants 5 and 250 scale each consituent to roughly 1 for focussed image
 % i = ones(3,4);
 % b =  i/sum(i(:));
-Y = rangefilt(Image);
-
-data  = double(Y(:));
-C  = var(data)/mean(data);
+data  = double(Image.data(:));
+C(1)  = var(data)/mean(data);

@@ -1,6 +1,6 @@
 % Crop image to disk size and call findHyphae
 
-showGraphics = false;
+showGraphics = true;
 
 pathName = 'H:\Cornell March Samples\Day 2\'; % 'H:\FebDay1\';
 DIR = dir(pathName);

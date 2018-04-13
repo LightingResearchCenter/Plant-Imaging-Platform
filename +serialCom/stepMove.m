@@ -54,7 +54,7 @@ end
 statusBin = dec2binvec(statusInt,8);
 if statusBin(3)%TOOO just fix this (return home bounce error)'
     if statusInt>164
-        keyboard;
+%         keyboard;
         %this should only happen with the Y and Z Motors
     end
     serialCom.writeToSerial(sPort,'D');

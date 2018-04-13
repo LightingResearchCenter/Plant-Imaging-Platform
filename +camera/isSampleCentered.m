@@ -1,31 +1,29 @@
-function isSampleCentered(app ,nRun)
+function sampleFound = isSampleCentered(app,closeCamera)
 %isSampleCentered Summary of this function goes here
 %
 
 % Input Setup
 if nargin == 1
-    nRun = 0;
-else
-    nRun = nRun +1;
-end
-if nRun >10
-    return
+    closeCamera = true;
 end
 % check location
-if app.VidObj == -1
-    ok = D850_driver_v2('open'); %#ok<*NASGU>
-    ok = D850_driver_v2('live_on');
+if closeCamera
+    if app.VidObj == -1
+        ok = D850_driver_v2('open'); %#ok<*NASGU>
+        ok = D850_driver_v2('live_on');
+        var = onCleanup(@clean);
+    end   
 end
-var = onCleanup(@clean);
 if app.VidObj == -1
     [ok,curImage] = D850_driver_v2('live_get'); %#ok<*ASGLU>
 else
     curImage = getsnapshot(app.VidObj);
 end
-imshow(curImage);
-drawnow;
-[ sampleFound ,BWimg] = isSample( app );
-if sampleFound
+
+[sampleFound ,BWimg] = camera.isSampleMask( curImage );
+
+nRun = 0;
+while (sampleFound) && (nRun <10)
     Ilabel1 = logical(BWimg);
     stat1 = regionprops(Ilabel1,'centroid');
     sampleCentroid = [stat1(1).Centroid(1),stat1(1).Centroid(2)];
@@ -35,57 +33,27 @@ if sampleFound
     deltaX = sampleCentroid(1)-pictureCentroid(1);
     deltaY = sampleCentroid(2)-pictureCentroid(2);
     Xstep = floor(((deltaX/50)*app.Xmm2step));
-    Ystep = floor(((deltaY/50)*(app.Ymm2step*1.3)));
+    Ystep = floor(((deltaY/50)*(app.Ymm2step)));
     
     % tell motor to move and check new location.
     
-    if abs(Xstep)+abs(Ystep) > 10
+    if abs(Xstep)+abs(Ystep) > 20
         serialCom.moveTo(app.Xmotor,app.curX-round(Xstep));
         serialCom.moveTo(app.Ymotor,app.curY-round(Ystep));
-    else 
-        return
-    end
-    if app.VidObj == -1
-        [ok,curImage] = D850_driver_v2('live_get'); %#ok<*ASGLU>
+        if app.VidObj == -1
+            [ok,curImage] = D850_driver_v2('live_get'); %#ok<*ASGLU>
+        else
+            curImage = getsnapshot(app.VidObj);
+        end
+        [sampleFound ,BWimg] = camera.isSampleMask( curImage );
     else
-        curImage = getsnapshot(VidObj);
+        break
     end
-    [TFSample,~]=isSample(app);
-    if TFSample && nRun <= 10
-        camera.isSampleCentered(app,nRun);
-    end
-else
-    return
+    nRun = nRun +1;
 end
-end
-
-function [ sampleFound ,Iout] = isSample( app )
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
-
-if app.VidObj == -1
-    [ok,img] = D850_driver_v2('live_get'); %#ok<*ASGLU>
-else
-    img = getsnapshot(app.VidObj);
-end
-[bw2,~] = camera.createMask(img);
-[x,y] = size(bw2);
-se = strel('disk',5);
-bw4 = imclose(bw2,se);
-bw5 = imfill(bw4,'holes');
-
-
-IL = bwlabel(bw5);
-R = regionprops(bw5,'Area');
-[~,ind] = max([R(:).Area]);
-
-Iout = ismember(IL,ind);
-% imshow(Iout);
-img1_double = double(Iout);
-if sum( img1_double(:)) > .25*x*y
-    sampleFound = true;
-else
-    sampleFound = false;
+if sampleFound
+    hystVal = (app.ImagesSpinner.Value*app.StepsImageSpinner.Value)/2;
+    camera.autoFocusGaussian(app.VidObj,app.Zmotor,app.FocusStepEditField.Value*2,hystVal,0);
 end
 end
 

@@ -5,9 +5,8 @@ else
     fullText = serialCom.str2com(text);
 end
 fprintf(sPort,fullText);
-
 output = fgetl(sPort);
-while (sPort.BytesAvailable > 1)
+while(sPort.BytesAvailable >1)
     output = fgetl(sPort);
 end
 serialCom.comErrorCheck(output)

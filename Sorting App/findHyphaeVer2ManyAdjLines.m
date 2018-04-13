@@ -2,9 +2,9 @@ function [hyphaeCnt,featureMatrix] = findHyphaeVer2ManyAdjLines(leafImage,thickn
 % Find hyphae in leaf image
 
 %showGraphics = true; % true or false
-numPeaksLimit = 100; % The maximum number of peaks returned by houghpeaks()
+numPeaksLimit = 30; % The maximum number of peaks returned by houghpeaks()
 peakThreshold = 100; %100; % Threshold of Hough transform peak value
-fillGapLen = 20; %10; %20; % Maximum gap size defining line segments, [pixels]
+fillGapLen = 30; %10; %20; % Maximum gap size defining line segments, [pixels]
 minLineLen = 150; %200; %Minimum line segment length returned by houghlines(), [pixels]
 peakOverAvgThres = 3; %4;
 adjacentLineRatioThres = 0.15; %0.15;
